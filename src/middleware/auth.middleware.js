@@ -1,6 +1,10 @@
+const jwt = require('jsonwebtoken');
+
 const errorType = require("../contants/error-types");
 const service = require("../service/user.service");
 const {md5Password} = require('../utils/handle-password');
+
+const {PUBLIC_KEY} = require('../app/config');
 
 const verifyLogin = async (ctx, next) => {
 
@@ -15,7 +19,6 @@ const verifyLogin = async (ctx, next) => {
   // 2.判断用户名是否存在
   const result = await service.getUserByName(name);
   const user = result[0];
-  console.log(user);
   if(!user) {
     console.log("此用户不存在");
     const error = new Error(errorType.USER_DESE_NOT_EXISTS);
@@ -26,11 +29,33 @@ const verifyLogin = async (ctx, next) => {
     const error = new Error(errorType.PASSWORD_IS_INCORRENT);
     return ctx.app.emit('error', error, ctx)
   }
-
   ctx.user = user;
   await next();
 }
 
+const verifyAuth = async (ctx, next) => {
+  console.log("验证授权的middleware...");
+  const authorization = ctx.headers.authorization;
+  if(!authorization) {
+    const error = new Error(errorType.UNAUTHORIZATION);
+    return ctx.app.emit('error', error, ctx)
+  }
+  const token = authorization.replace('Bearer ', '');
+  console.log(token);
+  try {
+    const result = jwt.verify(token, PUBLIC_KEY, {
+      algorithms: ['RS256']
+    })    
+    ctx.user = result;
+    await next();
+  } catch (err) {
+    const error = new Error(errorType.UNAUTHORIZATION);
+    ctx.app.emit('error', error, ctx)
+  }
+
+}
+
 module.exports = {
-  verifyLogin
+  verifyLogin,
+  verifyAuth
 }

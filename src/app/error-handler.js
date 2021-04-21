@@ -20,6 +20,10 @@ const errorHandler = (error, ctx) => {
       status = 400; //参数错误
       message = "密码错误";
     break;
+    case errorType.UNAUTHORIZATION:
+      status = 401; //Unauthorized
+      message = "未授权";
+    break;
     default: 
       status = 404;
       message = "发生错误了";
