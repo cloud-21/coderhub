@@ -1,3 +1,4 @@
+const momentRouter = require('../router/moment.router');
 const momentService = require('../service/moment.service');
 class MomentController {
   async create(ctx, next) {
@@ -28,6 +29,23 @@ class MomentController {
     const result = await momentService.getMomentList(offset, size); 
 
     ctx.body = result;
+  }
+  async update(ctx, next) {
+    // 获取数据（momentId)
+    const {momentId} = ctx.params;
+    const { content } = ctx.request.body;
+
+    // 修改内容
+    const result = await momentService.update(content, momentId);
+    console.log(result);
+    ctx.body = result;
+    await next();
+  }
+  async remove (ctx, next) {
+    const { momentId } = ctx.params;
+    const result = await momentService.remove(momentId);
+    ctx.body = result;
+    await next();
   }
 }
 

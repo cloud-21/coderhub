@@ -22,7 +22,11 @@ const errorHandler = (error, ctx) => {
     break;
     case errorType.UNAUTHORIZATION:
       status = 401; //Unauthorized
-      message = "未授权";
+      message = "无效的token";
+    break;
+    case errorType.UNCHECKPERMISSION:
+      status = 401; //Unauthorized
+      message = "您没有操作权限";
     break;
     default: 
       status = 404;
