@@ -28,6 +28,9 @@ const errorHandler = (error, ctx) => {
       status = 401; //Unauthorized
       message = "您没有操作权限";
     break;
+    case errorType.SERVER_ERROR:
+      status = 500; //服务器错误
+      message = "服务器错误";
     default: 
       status = 404;
       message = "发生错误了";

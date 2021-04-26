@@ -7,9 +7,11 @@ const {
 } = require('../middleware/auth.middleware')
 
 const {
-  create
+  create,
+  list
 } = require('../controller/label.controller')
 
-labelRouter.post('/', verifyAuth, create)
+labelRouter.post('/', verifyAuth, create);
+labelRouter.get('/', list);
 
 module.exports = labelRouter;

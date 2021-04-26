@@ -47,6 +47,21 @@ class MomentController {
     ctx.body = result;
     await next();
   }
+
+  async addLabels(ctx, next) {
+    const labels = ctx.labels;
+    const { momentId } = ctx.params;
+    console.log(labels, momentId);
+
+    for(let label of labels) {
+      const isExist = await momentService.hasLabel(momentId, label.id);
+      if(!isExist) {
+        await momentService.addLabel(momentId, label.id);
+      }
+    }
+
+    ctx.body = "给动态添加标签成功";
+  }
 }
 
 module.exports = new MomentController();

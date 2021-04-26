@@ -3,7 +3,8 @@ const USER_ALREADY_EXISTS = "user_already_exists";
 const USER_DESE_NOT_EXISTS = "user_dose_not_exists";
 const PASSWORD_IS_INCORRENT = "password_is_incorrent";
 const UNAUTHORIZATION = "unauthorization";
-const UNCHECKPERMISSION = "uncheckpermission"
+const UNCHECKPERMISSION = "uncheckpermission";
+const SERVER_ERROR = "server_error";
 
 module.exports = {
   NAME_OR_PASSWORD_IS_REQUIRED,
@@ -11,5 +12,6 @@ module.exports = {
   USER_DESE_NOT_EXISTS,
   PASSWORD_IS_INCORRENT,
   UNAUTHORIZATION,
-  UNCHECKPERMISSION
+  UNCHECKPERMISSION,
+  SERVER_ERROR
 }
