@@ -8,6 +8,7 @@ const PRIVATE_KEY = fs.readFileSync(resolve(__dirname, './keys/private.key'));
 const PUBLIC_KEY = fs.readFileSync(resolve(__dirname, './keys/public.key'));
 
 module.exports = {
+  APP_HOST,
   APP_PORT,
   MYSQL_PORT,
   MYSQL_HOST,

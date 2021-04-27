@@ -9,23 +9,26 @@ class MomentService {
   }
   async getMomentById(id) {
     const statement = `
-      SELECT 
-        m.id id, m.content content, m.createAt createTime, m.updateAt updateTime, 
-        JSON_OBJECT('id', u.id, 'name', u.name) author,
-        IF(COUNT(l.id),JSON_ARRAYAGG(
-					JSON_OBJECT("id", l.id,"name", l.name)
-				),NULL) labels,
-          JSON_ARRAYAGG(
-            JSON_OBJECT('id',c.id, 'content',c.content , 'userId',c.user_id, 'createTime', c.createAt,
-                        'user',JSON_OBJECT('id',cu.id, 'userName',cu.name))
-          ) comments
-      FROM moment m
-      LEFT JOIN user u ON m.user_id = u.id
-      LEFT JOIN comment c ON c.moment_id = m.id
-      LEFT JOIN user cu ON c.user_id = cu.id
-      LEFT JOIN moment_label ml ON ml.moment_id = m.id
-			LEFT JOIN label l ON l.id = ml.label_id
-      WHERE m.id = ?;
+    SELECT 
+    m.id id, m.content content, m.createAt createTime, m.updateAt updateTime, 
+    JSON_OBJECT('id', u.id, 'name', u.name) author,
+    IF(COUNT(l.id),
+    JSON_ARRAYAGG(
+      JSON_OBJECT("id", l.id,"name", l.name)
+    ), 
+    NULL) labels,
+    
+    (SELECT IF(COUNT(c.id), JSON_ARRAYAGG(
+        JSON_OBJECT('id',c.id, 'content',c.content , 'userId',c.user_id, 'createTime', c.createAt,
+                    'user',JSON_OBJECT('id',cu.id, 'userName',cu.name))
+      )
+    ,NULL) FROM comment c LEFT JOIN user cu ON c.user_id = cu.id WHERE m.id = c.moment_id) comments
+
+  FROM moment m
+  LEFT JOIN user u ON m.user_id = u.id
+  LEFT JOIN moment_label ml ON ml.moment_id = m.id
+  LEFT JOIN label l ON l.id = ml.label_id
+  WHERE m.id = ?;
     `;
     const [result] = await connect.execute(statement, [id]);
     return result[0];
