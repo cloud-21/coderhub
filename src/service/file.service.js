@@ -20,6 +20,17 @@ class FileService {
     const [result] = await connect.execute(statement, [userId]);
     return result[0];
   }
+  async saveFile(filename, mimetype, size, commentId, userId) {
+    const statement = `INSERT INTO file (filename, mimetype, size, moment_id, user_id) VALUES(?,?,?,?,?);`;
+    const [result] = await connect.execute(statement,[filename, mimetype, size, commentId, userId]);
+    return result;
+  }
+
+  async getFileInfoByFilename(filename) {
+    const statement =`SELECT * FROM file WHERE filename = ?;`;
+    const [result] = await connect.execute(statement, [filename]);
+    return result[0];
+  }
 }
 
 module.exports = new FileService();

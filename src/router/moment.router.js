@@ -6,7 +6,8 @@ const {
   list,
   update,
   remove,
-  addLabels  
+  addLabels,
+  fileInfo
 } = require('../controller/monent.controller');
 const { 
   verifyAuth,
@@ -29,5 +30,8 @@ momentRouter.delete('/:momentId', verifyAuth , verifyPermission, remove);
 
 // 给动态添加标签
 momentRouter.post('/:momentId/labels', verifyAuth, verifyPermission, verifyLabelsExists,  addLabels);
+
+// 动态配图服务
+momentRouter.get('/images/:filename', fileInfo)
 
 module.exports = momentRouter; 

@@ -22,7 +22,8 @@ class MomentService {
         JSON_OBJECT('id',c.id, 'content',c.content , 'userId',c.user_id, 'createTime', c.createAt,
                     'user',JSON_OBJECT('id',cu.id, 'userName',cu.name))
       )
-    ,NULL) FROM comment c LEFT JOIN user cu ON c.user_id = cu.id WHERE m.id = c.moment_id) comments
+    ,NULL) FROM comment c LEFT JOIN user cu ON c.user_id = cu.id WHERE m.id = c.moment_id) comments,
+    (SELECT JSON_ARRAYAGG(CONCAT('http://localhost:8000/moment/images/',file.filename)) FROM file WHERE file.moment_id=m.id) images
 
   FROM moment m
   LEFT JOIN user u ON m.user_id = u.id
